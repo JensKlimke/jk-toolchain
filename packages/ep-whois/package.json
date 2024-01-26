@@ -1,0 +1,22 @@
+{
+  "name": "@endpoint/whois",
+  "version": "0.1.0",
+  "description": "The whois endpoint, identifying the instance.",
+  "author": "Jens Klimke <jens.klimke@rwth-aachen.de>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "start": "npx ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@sdk/api-lib": "^0.1.0"
+  }
+}

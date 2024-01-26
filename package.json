@@ -1,0 +1,20 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npx lerna run build && npm i",
+    "watch": "lerna watch -- lerna run build --scope=$LERNA_PACKAGE_NAME",
+    "start": "npx lerna run start"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "lerna": "^8.0.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.2"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@endpoint/auth",
+  "version": "0.1.0",
+  "description": "The auth endpoint, allowing to handle user access.",
+  "author": "Jens Klimke <jens.klimke@rwth-aachen.de>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "start": "nodemon --watch \"src/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"ts-node src/index.ts\""
+  },
+  "dependencies": {
+    "@sdk/api-lib": "^0.1.0"
+  }
+}

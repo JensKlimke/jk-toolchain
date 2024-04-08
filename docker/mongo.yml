@@ -25,6 +25,6 @@ services:
 
 volumes:
   mongo-vol:
-    external: true
+    external: false
   mongo-log:
-    external: true
+    external: false

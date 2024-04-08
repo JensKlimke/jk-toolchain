@@ -1,4 +1,0 @@
-# `api-lib`
-
-> TODO: description
-

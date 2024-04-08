@@ -1,0 +1,34 @@
+{
+  "name": "@sdk/dashboard",
+  "version": "0.1.0",
+  "description": "The dashboard library",
+  "author": "Jens Klimke <jens.klimke@rwth-aachen.de>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "npx tsc & npm i",
+    "watch": "watch 'npm run build' ./src"
+  },
+  "dependencies": {
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node-sass": "^4.11.7",
+    "css-loader": "^6.10.0",
+    "node-sass": "^7.0.3",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.0",
+    "react-icons": "^5.0.1",
+    "react-secure-storage": "^1.3.2",
+    "sass": "^1.70.0",
+    "sass-loader": "^14.1.0",
+    "style-loader": "^3.3.4"
+  }
+}

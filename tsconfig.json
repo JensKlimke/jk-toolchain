@@ -1,8 +1,20 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "lib": [
+      "es6"
+    ],
   }
 }

@@ -1,0 +1,27 @@
+{
+  "name": "@sdk/utils-lib",
+  "version": "0.1.0",
+  "description": "The utils lib",
+  "author": "Jens Klimke <jens.klimke@rwth-aachen.de>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "watch": "watch 'npm run build' ./src",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "loglevel": "^1.9.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.8"
+  }
+}

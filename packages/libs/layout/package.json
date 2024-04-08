@@ -1,0 +1,26 @@
+{
+  "name": "@sdk/layout",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "directories": {
+    "lib": "dist"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "watch": "watch 'npm run build' ./src"
+  },
+  "dependencies": {
+    "@types/node": "^16.18.79",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.18",
+    "bootstrap-icons": "^1.11.3",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "watch": "^1.0.2"
+  }
+}

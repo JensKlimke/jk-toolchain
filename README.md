@@ -11,7 +11,7 @@
   - Body `UploadDoc<ItemData>[]` The item data
   - Response 201 `ResponseDoc<ItemData>[]` The created item
 - [ ] `GET /items` Returns all or the filtered items
-  - Query `{ filter ?: FilterType }` Defines the filter of the items  
+  - Query `filter ?: FilterType` Defines the filter of the items  
   - Response 200 `ResponseDoc<ItemData>[]` The requested elements
 - [ ] `GET /items/{item}` Returns the requested item
   - Parameter `item : string` The item ID
@@ -24,14 +24,14 @@
   - Body `Partial<UploadDoc<ItemData>>` The fields to be changed
   - Response 200 `ResponseDoc<ItemData>` The changed item
 - [ ] `PATCH /items {...}` Modifies all or the filtered items
-  - Query `{ filter ?: FilterType } ` Defines the filter of the items  
+  - Query `filter ?: FilterType` Defines the filter of the items  
   - Body `Partial<UploadDoc<ItemData>>` The fields to be changed
   - Response 200 `ResponseDoc<ItemData>[]` The changed items
 - [ ] `DELETE /items/{item}` Deletes item and its sub-items
   - Parameter `item : string` The item ID
   - Response 200 `string[]` List of deleted IDs
 - [ ] `DELETE /items/` Deletes all or the filtered items
-  - Query `{ filter ?: FilterType } ` Defines the filter of the elements  
+  - Query `filter ?: FilterType` Defines the filter of the elements  
   - Response 200 `string[]` List of deleted IDs
 
 **Tags operations**
@@ -90,6 +90,7 @@
   - Body `LinkType[]` The links to be added
   - Response `LinkType[]` The complete links array of the item
 - [ ] `GET /items/{item}/links` Returns the links of the item
+  - Description: If type query is not set, all links are returned. If type is set, only links of specific type are returned.
   - Query `type ?: string` Filters the links by their type
   - Parameter `item : string` The item ID
   - Response `LinkType[]` The links array of the item
@@ -108,10 +109,9 @@ see more about status (TODO)
   - Parameter `item : string` The item ID
   - Body `string` The transition key to follow
   - Response `{previousStatus : string, newStatus : string, transition : string}` The complete links array of the item
-- [ ] `GET /items/{item}/links` Returns the links of the item
-  - TODO: Filter by link type
+- [ ] `GET /items/{item}/status` Returns the status of the item
   - Parameter `item : string` The item ID
-  - Response `LinkType[]` The links array of the item
+  - Response `{currentStatus: string, transitions: {type : string, status : string}[]` The current status and the possible transition to the next statuses
 
 
 ### Types

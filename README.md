@@ -2,113 +2,143 @@
 
 ## Items API
 
-**Main item operations**
-
-TODO: filter
+**Main item operations**†
 
 - [ ] `POST /items {...}` Adds a single new item
-  - Body `ItemData`
-  - Response `Return<T>`
+  - Body `UploadDoc<ItemData>`
+  - Response 201 `ResponseDoc<ItemData>`
 - [ ] `POST /items [{...}, {...}]` Adds multiple new items
-  - Body `ItemData[]`
-  - Response `Return<T>[]`
-- [ ] `GET /items` Gets all items
-  - Response `Return<T>[]`
+  - Body `UploadDoc<ItemData>[]` The item data
+  - Response 201 `ResponseDoc<ItemData>[]` The created item
+- [ ] `GET /items` Returns all or the filtered items
+  - Query `{ filter ?: FilterType }` Defines the filter of the items  
+  - Response 200 `ResponseDoc<ItemData>[]` The requested elements
+- [ ] `GET /items/{item}` Returns the requested item
+  - Parameter `item : string` The item ID
+  - Response 200 `ResponseDoc<ItemData>[]` The requested elements
 - [ ] `PUT /items/{item} {...}` Updates the item
-  - Body `ItemData`
-  - Response `Return<T>`
+  - Body `ItemData` The item data 
+  - Response 200 `ResponseDoc<ItemData>` The changed item
 - [ ] `PATCH /items/{item} {...}` Modifies the item
-  - Body `Partial<ItemData>`
-  - Response `Return<T>[]`
+  - Parameter `item : string` The item ID
+  - Body `Partial<UploadDoc<ItemData>>` The fields to be changed
+  - Response 200 `ResponseDoc<ItemData>` The changed item
+- [ ] `PATCH /items {...}` Modifies all or the filtered items
+  - Query `{ filter ?: FilterType } ` Defines the filter of the items  
+  - Body `Partial<UploadDoc<ItemData>>` The fields to be changed
+  - Response 200 `ResponseDoc<ItemData>[]` The changed items
 - [ ] `DELETE /items/{item}` Deletes item and its sub-items
-  - Response `string[]` List of deleted IDs
-- [ ] `DELETE /items/` Deletes all items
-  - Response `string[]` List of deleted IDs
+  - Parameter `item : string` The item ID
+  - Response 200 `string[]` List of deleted IDs
+- [ ] `DELETE /items/` Deletes all or the filtered items
+  - Query `{ filter ?: FilterType } ` Defines the filter of the elements  
+  - Response 200 `string[]` List of deleted IDs
 
-** Tags operations **
+**Tags operations**
 
-- [ ] `POST /items/{id}/tags {...}` Adds tags to the item
+- [ ] `POST /items/{item}/tags {...}` Adds tags to the item
   - Description: Existing tags are ignored. Existing tag keys are overwritten.
+  - Parameter `item : string` The item ID
   - Body `{[key : string] : TagValueType}` The tags to be added
   - Response `{[key : string] : TagValueType}` The complete tag object of the item
-- [ ] `GET /items/{id}/tags` Returns the tags of the item
+- [ ] `GET /items/{item}/tags` Returns the tags of the item
+  - Parameter `item : string` The item ID
   - Response `{[key : string] : TagValueType}` The complete tag object of the item
-- [ ] `PUT /items/{id}/tags {...}` Replaces all tags of the item
+- [ ] `PUT /items/{item}/tags {...}` Replaces all tags of the item
   - Description: All previous tags are deleted.
+  - Parameter `item : string` The item ID
   - Body `{[key : string] : TagValueType}` The tags to be set
   - Response `{[key : string] : TagValueType}` The complete tag object of the item
 - [ ] `PATCH /items/{item}/tags/{tagKey} {...}` Modifies the tag with the given tag key by setting the new value
+  - Description: Creates the tag, if key is unknown.
+  - Parameter `item : string` The item ID
+  - Parameter `tagKey : string` The key of the tag
   - Body `TagValueType`
   - Response `{[key : string] : TagValueType}` The complete tag object of the item
-- [ ] `DELETE /items/{id}/tags` Deletes the tags from the item
+- [ ] `DELETE /items/{item}/tags` Deletes the tags from the item
   - Description: Tags which completely defined (tag value != undefined) are deleted if they fit with key and value. Tags with value set to undefined are deleted if key fits (the value is ignored).
+  - Parameter `item : string` The item ID
   - Body `{[key : string] : TagValueType | undefined }` The tags to be deleted
   - Response `{[key : string] : TagValueType}` The complete tag object of the item
 
-** Labels operations **
+**Labels operations**
 
-- [ ] `POST /items/{id}/labels [...]` Adds labels to the item
+- [ ] `POST /items/{item}/labels [...]` Adds labels to the item
   - Description: Existing labels are ignored.
+  - Parameter `item : string` The item ID
   - Body `string[]` The labels to be added
   - Response `string[]` The complete labels array of the item
-- [ ] `GET /items/{id}/labels` Returns the labels of the item
+- [ ] `GET /items/{item}/labels` Returns the labels of the item
+  - Parameter `item : string` The item ID
   - Response `string[]` The complete labels array of the item
-- [ ] `PUT /items/{id}/labels [...]` Replaces all labels of the item
+- [ ] `PUT /items/{item}/labels [...]` Replaces all labels of the item
   - Description: All previous labels are deleted.
+  - Parameter `item : string` The item ID
   - Body `string[]` The labels to be set    
   - Response `string[]` The complete labels array of the item
-- [ ] `DELETE /items/{id}/labels` Deletes the labels from the item
+- [ ] `DELETE /items/{item}/labels` Deletes the labels from the item
   - Unknown labels are ignored.
+  - Parameter `item : string` The item ID
   - Body `string[]` The labels to be deleted
   - Response `string[]` The complete labels array of the item
      
-** Links operations **
+**Links operations**
 
-- [ ] `POST /items/{id}/links {...}` Adds new links to the item
+- [ ] `POST /items/{item}/links {...}` Adds new links to the item
   - Description: Existing links are ignored.
+  - Parameter `item : string` The item ID
   - Body `LinkType[]` The links to be added
   - Response `LinkType[]` The complete links array of the item
-- [ ] `GET /items/{id}/links` Returns the links of the item
-  - TODO: Filter by link type    
+- [ ] `GET /items/{item}/links` Returns the links of the item
+  - Query `type ?: string` Filters the links by their type
+  - Parameter `item : string` The item ID
   - Response `LinkType[]` The links array of the item
-- [ ] `DELETE /items/{id}/links` Deletes the links from the item
+- [ ] `DELETE /items/{item}/links` Deletes the links from the item
   - Description: Links which completely defined (link type != undefined and target != undefined) are deleted if they fit with type and target. Links with target not set are deleted if type fits (the target is ignored).
-  - Body `{type : string, target ?: string}` The tags to be deleted
+  - Parameter `item : string` The item ID
+  - Body `{type : string, target ?: string}[]` The tags to be deleted
   - Response `LinkType[]` The links array of the item
      
-** Status operations **
+**Status operations**
 
 see more about status (TODO)
 
-- [ ] `PATCH /items/{id}/status {...}` Updates the status
+- [ ] `PATCH /items/{item}/status {...}` Updates the status
   - Description: Status can only be changed to a new state by a valid transition.
+  - Parameter `item : string` The item ID
   - Body `string` The transition key to follow
-  - Response `{status : string, }` The complete links array of the item
-- [ ] `GET /items/{id}/links` Returns the links of the item
-  - TODO: Filter by link type    
+  - Response `{previousStatus : string, newStatus : string, transition : string}` The complete links array of the item
+- [ ] `GET /items/{item}/links` Returns the links of the item
+  - TODO: Filter by link type
+  - Parameter `item : string` The item ID
   - Response `LinkType[]` The links array of the item
 
 
 ### Types
 
-**Item data set without ID**
+**Item data set without ID, e.g.**
 
     type ItemData = {
       title : string
       quantity : number
     }
 
-**Data with ID**
+**Data with internal fields**
 
-    type Document<T> = T & {
-      _id : ObjectId
+    type Internal = {
       _commit : ObjectId
-      _item : ObjectId
       _tags : Record<string, TagValueType>
       _labels : string[]
       _links : { target : ObjectId, type : string }
       _status : string 
     }
+
+    type ResponseDoc<T> = T & Internal & {
+      _id : ObjectId
+      _item : ObjectId
+    }
+
+    type UploadDoc<T> = T & Partial<Internal>
 
 **Mapping to return types**
 
@@ -120,6 +150,8 @@ TODO: check if tags, labels, links, etc. are added
     type Return<T> = T & {
       id : string // (= Document<T>._item.toHexString())
     }
+
+    type FilterType = object; // TODO
 
 ## TODOs
 

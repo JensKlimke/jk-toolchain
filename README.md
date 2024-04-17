@@ -2,7 +2,7 @@
 
 ## Items API
 
-**Main item operations**†
+**Main item operations**
 
 - [ ] `POST /items {...}` Adds a single new item
   - Body `UploadDoc<ItemData>`
@@ -116,46 +116,44 @@ see more about status (TODO)
 
 ### Types
 
-**Item data set without ID, e.g.**
+**Type definitions**
 
     type ItemData = {
       title : string
       quantity : number
     }
 
-**Data with internal fields**
-
-    type Internal = {
+    type Document<T> = T & {
+      _id : ObjectId
+      _item : ObjectId
       _commit : ObjectId
       _tags : Record<string, TagValueType>
       _labels : string[]
-      _links : { target : ObjectId, type : string }
+      _links : { target : ObjectId, type : string }[]
       _status : string 
     }
 
-    type ResponseDoc<T> = T & Internal & {
-      _id : ObjectId
-      _item : ObjectId
+    type TagValueType = string | number | boolean | null;
+    type LinkType = {type : string, target : string};
+    type FilterType = object; // TODO
+
+    type ResponseDoc<T> = T & {
+      _id : string // this is the item ID (Document<T>._item.toHexString())
+    }
+
+    type Internal = {
+      _tags : {[key : string] : TagValueType}
+      _labels : string[]
+      _links : LinkType[]
+      _status : string
     }
 
     type UploadDoc<T> = T & Partial<Internal>
-
-**Mapping to return types**
-
-TODO: check if tags, labels, links, etc. are added
-
-    type TagValueType = string | number | boolean | null;
-    type LinkType = {type : string, target : string};
-
-    type Return<T> = T & {
-      id : string // (= Document<T>._item.toHexString())
-    }
-
-    type FilterType = object; // TODO
 
 ## TODOs
 
 - [ ] Add created field to commit
 - [ ] Rank (by order in commit base)
+- [ ] Send commit on updates and check if head to ensure integrity
 
 

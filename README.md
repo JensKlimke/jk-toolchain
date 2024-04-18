@@ -5,28 +5,28 @@
 **Main item operations**
 
 - [ ] `POST /items {...}` Adds a single new item
-  - Body `UploadDoc<ItemData>`
-  - Response 201 `ResponseDoc<ItemData>`
+  - Body `UploadDoc<any>`
+  - Response 201 `ResponseDoc<any>`
 - [ ] `POST /items [{...}, {...}]` Adds multiple new items
-  - Body `UploadDoc<ItemData>[]` The item data
-  - Response 201 `ResponseDoc<ItemData>[]` The created item
+  - Body `UploadDoc<any>[]` The item data
+  - Response 201 `ResponseDoc<any>[]` The created item
 - [ ] `GET /items` Returns all or the filtered items
   - Query `filter ?: FilterType` Defines the filter of the items  
-  - Response 200 `ResponseDoc<ItemData>[]` The requested elements
+  - Response 200 `ResponseDoc<any>[]` The requested elements
 - [ ] `GET /items/{item}` Returns the requested item
   - Parameter `item : string` The item ID
-  - Response 200 `ResponseDoc<ItemData>[]` The requested elements
+  - Response 200 `ResponseDoc<any>` The requested element
 - [ ] `PUT /items/{item} {...}` Updates the item
-  - Body `ItemData` The item data 
-  - Response 200 `ResponseDoc<ItemData>` The changed item
+  - Body `any` The item data 
+  - Response 200 `ResponseDoc<any>` The changed item
 - [ ] `PATCH /items/{item} {...}` Modifies the item
   - Parameter `item : string` The item ID
-  - Body `Partial<UploadDoc<ItemData>>` The fields to be changed
-  - Response 200 `ResponseDoc<ItemData>` The changed item
+  - Body `Partial<UploadDoc<any>>` The fields to be changed
+  - Response 200 `ResponseDoc<any>` The changed item
 - [ ] `PATCH /items {...}` Modifies all or the filtered items
   - Query `filter ?: FilterType` Defines the filter of the items  
-  - Body `Partial<UploadDoc<ItemData>>` The fields to be changed
-  - Response 200 `ResponseDoc<ItemData>[]` The changed items
+  - Body `Partial<UploadDoc<any>>` The fields to be changed
+  - Response 200 `ResponseDoc<any>[]` The changed items
 - [ ] `DELETE /items/{item}` Deletes item and its sub-items
   - Parameter `item : string` The item ID
   - Response 200 `string[]` List of deleted IDs
@@ -118,11 +118,6 @@ see more about status (TODO)
 
 **Type definitions**
 
-    type ItemData = {
-      title : string
-      quantity : number
-    }
-
     type Document<T> = T & {
       _id : ObjectId
       _item : ObjectId
@@ -155,16 +150,62 @@ see more about status (TODO)
 
 ### Data type definition
     
-    type ItemData = {
+    type ContractData = {
       title : string
-      quantity : number
+      description : string
+      creditor : string
+      amount : number
+      annually : number // generated
+      shared : boolean
+      months : boolean[]
     }
 
-    /*
-     *   planned (*) <--> active --> terminated 
-     *      ^                           |
-     *      -----------------------------
+    type ResponseContract = ContractData & {
+      id : string
+      account : string
+      status : string
+    }
+
+    type ContractFilter = {
+      creditor ?: string
+      shared ?: boolean
+      months ?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11
+      account ?: string
+      status ?: 'Planned' | 'Active' | 'Terminated'
+    }
+
+    /* 
+     * WORKFLOW: (transition : start state -> end state
+     * (*) -> Planned
+     * activate : Planned -> Active
+     * terminate : Active -> Terminated
+     * reactivate : Terminated -> Active
      */
+
+- [ ] `GET /contracts` Returns all or the filtered contracts
+  - Query `filter : ContractFilter` Defines the filter of the contracts 
+  - Response 200 `ResponseContract[]` The requested contracts
+- [ ] `GET /contracts/{contractId}` Returns the requested contract
+  - Parameter `contractId : string` The contract ID
+  - Response 200 `ResponseContract` The requested contract
+- [ ] `POST /contracts {...}` Adds a single contract
+  - Parameter `accountId : string` The account ID        
+  - Body `ContractData`
+  - Response 201 `ResponseContract` The new contract
+- [ ] `PUT /contracts/{contractId} {...}` Updates the contract body
+  - Parameter `contractId : string` The contract ID
+  - Body `ContractData` The contract data 
+  - Response 200 `ResponseContract` The changed contract
+- [ ] `PATCH /contracts/{contractId}/account {...}` Updates the account of the contract
+  - Parameter `accountId : string` The account ID
+  - Response 200 `ResponseContract` The changed contract
+- [ ] `PATCH /contracts/{contractId}/status {...}` Updates the status of the contract
+  - Parameter `transition : string` The transition key
+  - Response 200 `ResponseContract` The changed contract
+- [ ] `DELETE /contracts/{contractId}` Deletes the contract
+  - Parameter `contractId : string` The contract ID
+  - Response 200 `string` The deleted contract ID
+
 
 ## TODOs
 
@@ -172,5 +213,6 @@ see more about status (TODO)
 - [ ] Rank (by order in commit base)
 - [ ] Send commit on updates and check if head to ensure integrity
 - [ ] Status with date
+- [ ] Sort, Limit
 
 

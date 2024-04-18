@@ -1,21 +1,35 @@
 # JK Toolchain
 
+## Database client
+
+* MongoClient: Connects to the mongo database.
+  * One MongoClient is instantiated, when the App is started
+  * The MongoClient is connected, when the App is started asynchronuously
+* DbSession: Is the database access session
+  * Every request instatiates a new DbSession.
+  * Within a DbSession, multiple transactions can be executed.
+  * Within a DbSession, a commit can be created which wraps a transaction and handles all executions in one commit.
+* DbClient: A wrapper to handle access to item types
+  * Multiple DbClients are instatiated, when the App is started.
+  * Each DbClient instance focusses on a single item type.
+  * Each DbClient wrapps the MongoClient instance.
+
 ## Items API
 
 **Main item operations**
 
 - [ ] `POST /items {...}` Adds a single new item
-  - Body `UploadDoc<any>`
-  - Response 201 `ResponseDoc<any>`
+  - Body `UploadDoc<any>` The item data
+  - Response 201 `ResponseDoc<any>` The created item
 - [ ] `POST /items [{...}, {...}]` Adds multiple new items
-  - Body `UploadDoc<any>[]` The item data
-  - Response 201 `ResponseDoc<any>[]` The created item
+  - Body `UploadDoc<any>[]` The item data vector
+  - Response 201 `ResponseDoc<any>[]` The created items
 - [ ] `GET /items` Returns all or the filtered items
   - Query `filter ?: FilterType` Defines the filter of the items  
-  - Response 200 `ResponseDoc<any>[]` The requested elements
+  - Response 200 `ResponseDoc<any>[]` The requested items
 - [ ] `GET /items/{item}` Returns the requested item
   - Parameter `item : string` The item ID
-  - Response 200 `ResponseDoc<any>` The requested element
+  - Response 200 `ResponseDoc<any>` The requested item
 - [ ] `PUT /items/{item} {...}` Updates the item
   - Body `any` The item data 
   - Response 200 `ResponseDoc<any>` The changed item
@@ -31,7 +45,7 @@
   - Parameter `item : string` The item ID
   - Response 200 `string[]` List of deleted IDs
 - [ ] `DELETE /items/` Deletes all or the filtered items
-  - Query `filter ?: FilterType` Defines the filter of the elements  
+  - Query `filter ?: FilterType` Defines the filter of the items  
   - Response 200 `string[]` List of deleted IDs
 
 **Tags operations**
@@ -130,7 +144,7 @@ see more about status (TODO)
 
     type TagValueType = string | number | boolean | null;
     type LinkType = {type : string, target : string};
-    type FilterType = object; // TODO
+    type FilterType = object; 
 
     type ResponseDoc<T> = T & {
       _id : string // this is the item ID (Document<T>._item.toHexString())
@@ -146,7 +160,7 @@ see more about status (TODO)
     type UploadDoc<T> = T & Partial<Internal>
 
 
-## Example contracts
+## Contracts API
 
 ### Data type definition
     
@@ -185,26 +199,33 @@ see more about status (TODO)
 - [ ] `GET /contracts` Returns all or the filtered contracts
   - Query `filter : ContractFilter` Defines the filter of the contracts 
   - Response 200 `ResponseContract[]` The requested contracts
+  - Controller: `getContracts`
 - [ ] `GET /contracts/{contractId}` Returns the requested contract
   - Parameter `contractId : string` The contract ID
   - Response 200 `ResponseContract` The requested contract
+  - Controller: `getContract`
 - [ ] `POST /contracts {...}` Adds a single contract
-  - Parameter `accountId : string` The account ID        
+  - Query `accountId : string` The account ID        
   - Body `ContractData`
   - Response 201 `ResponseContract` The new contract
+  - Controller: `addContract`
 - [ ] `PUT /contracts/{contractId} {...}` Updates the contract body
   - Parameter `contractId : string` The contract ID
   - Body `ContractData` The contract data 
   - Response 200 `ResponseContract` The changed contract
-- [ ] `PATCH /contracts/{contractId}/account {...}` Updates the account of the contract
+  - Controller: `modifyContract`
+- [ ] `PATCH /contracts/{contractId}/account/{accountId} {...}` Updates the account of the contract
   - Parameter `accountId : string` The account ID
   - Response 200 `ResponseContract` The changed contract
-- [ ] `PATCH /contracts/{contractId}/status {...}` Updates the status of the contract
-  - Parameter `transition : string` The transition key
+  - Controller: `updateAccountOfContract`
+- [ ] `PATCH /contracts/{contractId}/status/{transitionKey} {...}` Updates the status of the contract
+  - Parameter `transitionKey : string` The transition key
   - Response 200 `ResponseContract` The changed contract
+  - Controller: `updateStatusOfContract`
 - [ ] `DELETE /contracts/{contractId}` Deletes the contract
   - Parameter `contractId : string` The contract ID
   - Response 200 `string` The deleted contract ID
+  - Controller: `deleteContract`
 
 
 ## TODOs
@@ -214,5 +235,6 @@ see more about status (TODO)
 - [ ] Send commit on updates and check if head to ensure integrity
 - [ ] Status with date
 - [ ] Sort, Limit
+- [ ] Define generic filter type
 
 

@@ -1,0 +1,206 @@
+openapi: 3.0.0
+info:
+  title: Contract Management API
+  description: API for managing contracts
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+paths:
+  /contracts:
+    get:
+      summary: Retrieve contracts
+      parameters:
+        - in: query
+          name: filter
+          schema:
+            $ref: '#/components/schemas/ContractFilter'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResponseContract'
+    post:
+      summary: Add a new contract
+      parameters:
+        - in: query
+          name: accountId
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractData'
+      responses:
+        '201':
+          description: Contract created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseContract'
+  /contracts/{contractId}:
+    get:
+      summary: Retrieve a specific contract
+      parameters:
+        - in: path
+          name: contractId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseContract'
+    put:
+      summary: Update an existing contract
+      parameters:
+        - in: path
+          name: contractId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractData'
+      responses:
+        '200':
+          description: Contract updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseContract'
+    delete:
+      summary: Delete a contract
+      parameters:
+        - in: path
+          name: contractId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Contract deleted successfully
+          content:
+            application/json:
+              schema:
+                type: string
+  /contracts/{contractId}/account/{accountId}:
+    patch:
+      summary: Update the account associated with a contract
+      parameters:
+        - in: path
+          name: contractId
+          schema:
+            type: string
+          required: true
+          description: The ID of the contract to update
+        - in: path
+          name: accountId
+          schema:
+            type: string
+          required: true
+          description: The new account ID to associate with the contract
+      responses:
+        '200':
+          description: Account updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseContract'
+      operationId: updateAccountOfContract
+  /contracts/{contractId}/status/{transitionKey}:
+    patch:
+      summary: Update the status of a contract
+      parameters:
+        - in: path
+          name: contractId
+          schema:
+            type: string
+          required: true
+          description: The ID of the contract to update
+        - in: path
+          name: transitionKey
+          schema:
+            type: string
+          required: true
+          description: The key representing the status transition (e.g., 'activate', 'terminate', 'reactivate')
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {}  # Add schema for any request body data if needed
+      responses:
+        '200':
+          description: Status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseContract'
+      operationId: updateStatusOfContract
+
+components:
+  schemas:
+    ContractData:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        creditor:
+          type: string
+        amount:
+          type: number
+        annually:
+          type: number
+        shared:
+          type: boolean
+        months:
+          type: array
+          items:
+            type: boolean
+      required:
+        - title
+        - description
+        - creditor
+        - amount
+        - annually
+        - shared
+        - months
+    ResponseContract:
+      allOf:
+        - $ref: '#/components/schemas/ContractData'
+        - type: object
+          properties:
+            id:
+              type: string
+            account:
+              type: string
+            status:
+              type: string
+    ContractFilter:
+      type: object
+      properties:
+        creditor:
+          type: string
+        shared:
+          type: boolean
+        months:
+          type: integer
+          enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        account:
+          type: string
+        status:
+          type: string
+          enum: [Planned, Active, Terminated]

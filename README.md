@@ -236,5 +236,6 @@ see more about status (TODO)
 - [ ] Status with date
 - [ ] Sort, Limit
 - [ ] Define generic filter type
+- [ ] Checksums 
 
 

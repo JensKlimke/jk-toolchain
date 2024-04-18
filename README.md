@@ -150,10 +150,27 @@ see more about status (TODO)
 
     type UploadDoc<T> = T & Partial<Internal>
 
+
+## Example contracts
+
+### Data type definition
+    
+    type ItemData = {
+      title : string
+      quantity : number
+    }
+
+    /*
+     *   planned (*) <--> active --> terminated 
+     *      ^                           |
+     *      -----------------------------
+     */
+
 ## TODOs
 
 - [ ] Add created field to commit
 - [ ] Rank (by order in commit base)
 - [ ] Send commit on updates and check if head to ensure integrity
+- [ ] Status with date
 
 
